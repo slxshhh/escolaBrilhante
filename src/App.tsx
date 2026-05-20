@@ -11,6 +11,8 @@ import Scenario from "./components/Scenario";
 import NarrativeBubble from "./components/NarrativeBubble";
 import MediatorPanel from "./components/MediatorPanel";
 import { Sparkles } from "lucide-react";
+// @ts-ignore
+import escolaSuccessImg from "./assets/images/escola_brilhante_sucesso_1779321365548.png";
 
 const SESSION_CHALLENGE_COUNT = 6;
 
@@ -169,35 +171,53 @@ export default function App() {
       />
 
       {isCelebration ? (
-        <div className="fixed inset-0 flex items-center justify-center p-4 bg-white/20 backdrop-blur-md z-40">
+        <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md z-45 overflow-y-auto">
           <motion.div
-            initial={{ scale: 0.8, rotate: -5, opacity: 0 }}
+            initial={{ scale: 0.8, rotate: -3, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
-            transition={{ type: "spring", damping: 10 }}
-            className="bg-white/90 border-[10px] border-yellow-300 rounded-[4rem] p-8 sm:p-12 text-center max-w-2xl shadow-[0_40px_100px_-15px_rgba(0,0,0,0.3)] magic-glow relative"
+            transition={{ type: "spring", damping: 12, stiffness: 100 }}
+            className="bg-white border-[10px] border-yellow-300 rounded-[3.5rem] p-6 sm:p-10 text-center max-w-2xl w-full shadow-[0_45px_100px_rgba(0,0,0,0.5)] relative my-8"
           >
             {/* Animating Sparkles or Celebration Emojis */}
             <motion.div
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="text-7xl sm:text-8xl mb-6"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="text-6xl sm:text-7xl mb-4"
             >
               🏆✨🏰
             </motion.div>
             
-            <h1 className="text-3xl sm:text-5xl font-black text-blue-600 mb-4 tracking-tight drop-shadow-sm uppercase">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-600 mb-2 tracking-tight drop-shadow-sm uppercase">
               Super Vitória! 🎉
             </h1>
+
+            {/* School Success Cartoon Artwork */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="my-5 border-4 border-amber-200 rounded-[2.5rem] overflow-hidden shadow-md max-w-md mx-auto aspect-[4/3] bg-sky-100 flex items-center justify-center relative group"
+            >
+              <img 
+                src={escolaSuccessImg} 
+                alt="Escola Brilhante Limpa e Feliz" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute top-3 right-3 bg-yellow-400 text-white font-bold text-xs px-3 py-1 rounded-full animate-bounce shadow">
+                BRILHANTE! 🌟
+              </div>
+            </motion.div>
             
-            <p className="text-xl sm:text-2xl font-black text-slate-700 leading-relaxed mb-8">
-              Parabéns, Amigos! A nossa escola está <span className="text-emerald-500">100% Brilhante</span>, limpa, organizada e muito mais alegre por causa do carinho de vocês! Vocês são os verdadeiros defensores do planeta! 🌈🌸🍃
+            <p className="text-lg sm:text-xl font-bold text-slate-700 leading-relaxed mb-6 px-2">
+              Parabéns, Amigos! A nossa escola está <span className="text-emerald-500">100% Brilhante</span>, limpa, organizada e cheia de flores e alegria por causa do carinho de vocês! Vocês são os verdadeiros guardiões do nosso lindo planeta! 🌈🌸🍃
             </p>
 
             <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={restartGame}
-              className="px-10 py-5 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-500 text-white font-black text-xl sm:text-2xl rounded-[2.5rem] shadow-[0_15px_30px_-5px_rgba(245,158,11,0.5)] border-4 border-white bouncy-btn flex items-center gap-3 mx-auto"
+              className="px-8 py-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-500 text-white font-black text-xl rounded-[2rem] shadow-[0_12px_25px_-5px_rgba(245,158,11,0.5)] border-4 border-white bouncy-btn flex items-center gap-3 mx-auto cursor-pointer"
             >
               Jogar de Novo! 🔄
             </motion.button>
