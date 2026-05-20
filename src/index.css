@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Outfit:wght@400;600;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Fredoka", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fredoka", sans-serif;
+  --breakpoint-xs: 480px;
+}
+
+@layer base {
+  body {
+    @apply font-sans overflow-hidden bg-sky-50;
+    cursor: default;
+    color: #1e293b;
+  }
+  
+  h1, h2, h3 {
+    @apply font-display font-black;
+  }
+}
+
+@layer utilities {
+  .text-shadow-lg {
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .cloud {
+    @apply absolute bg-white/60 rounded-full blur-2xl;
+  }
+
+  .floating {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .floating-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(2deg); }
+  }
+
+  .bubble-float {
+    animation: bubble 10s linear infinite;
+  }
+
+  @keyframes bubble {
+    0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
+    20% { opacity: 0.6; }
+    80% { opacity: 0.6; }
+    100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+  }
+
+  .magic-glow {
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+
+  .bouncy-btn {
+    @apply transition-all active:scale-90 hover:scale-105;
+  }
+}

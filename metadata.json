@@ -1,0 +1,8 @@
+{
+  "name": "Escola Brilhante",
+  "description": "Jogo interativo focado na ODS 4 para crianças de 6 a 10 anos, utilizando IA como motor lógico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
