@@ -4,9 +4,11 @@ interface NarrativeBubbleProps {
   feedback: string;
   loading: boolean;
   theme: 'white' | 'dark';
+  isWaitingTransition?: boolean;
+  onNext?: () => void;
 }
 
-export default function NarrativeBubble({ feedback, loading, theme }: NarrativeBubbleProps) {
+export default function NarrativeBubble({ feedback, loading, theme, isWaitingTransition, onNext }: NarrativeBubbleProps) {
   return (
     <div className="fixed bottom-24 sm:bottom-32 left-1/2 -translate-x-1/2 w-full max-w-[95%] sm:max-w-4xl px-4 sm:px-8 pointer-events-none">
       <AnimatePresence mode="wait">
@@ -30,7 +32,7 @@ export default function NarrativeBubble({ feedback, loading, theme }: NarrativeB
             animate={{ y: 0, scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ type: "spring", damping: 10, stiffness: 100 }}
-            className={`p-10 sm:p-14 rounded-[4rem] sm:rounded-[5rem] shadow-[0_35px_80px_-10px_rgba(0,0,0,0.25)] backdrop-blur-2xl border-[10px] relative
+            className={`p-10 sm:p-14 rounded-[4rem] sm:rounded-[5rem] shadow-[0_35px_80px_-10px_rgba(0,0,0,0.25)] backdrop-blur-2xl border-[10px] relative pointer-events-auto
               ${theme === 'white' ? 'bg-white/95 border-white' : 'bg-slate-900/95 border-slate-700'}
             `}
           >
@@ -39,6 +41,27 @@ export default function NarrativeBubble({ feedback, loading, theme }: NarrativeB
             `}>
               {feedback}
             </p>
+
+            {isWaitingTransition && onNext && (
+              <motion.div
+                className="flex justify-center mt-6"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", damping: 12 }}
+              >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onNext();
+                  }}
+                  className="px-8 py-3 sm:px-12 sm:py-4 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 text-white font-black text-xl sm:text-2xl rounded-full shadow-[0_12px_30px_rgba(16,185,129,0.35)] border-4 border-white cursor-pointer active:scale-95 hover:scale-105 transition-transform duration-100 flex items-center gap-2 pointer-events-auto animate-pulse"
+                >
+                  Avançar ➡️
+                </button>
+              </motion.div>
+            )}
+
             {/* Playful tail */}
             <div className={`absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 rotate-45 border-r-[10px] border-b-[10px]
               ${theme === 'white' ? 'bg-white/95 border-white' : 'bg-slate-900/95 border-slate-700'}

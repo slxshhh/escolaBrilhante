@@ -20,22 +20,134 @@ const ai = new GoogleGenAI({
   },
 });
 
-const SYSTEM_INSTRUCTION = `Você é o motor lógico do jogo "Escola Brilhante", focado na ODS 4 (Educação de Qualidade).
-Sua função é processar ações de crianças (6-10 anos) e retornar o estado do jogo.
+const SYSTEM_INSTRUCTION = `Você é o motor lógico super rápido do jogo infantil "Escola Brilhante" (ODS 4) para crianças pequenas de 6 a 10 anos.
 
-REGRAS DE LÓGICA:
-1. Analise se a resposta do usuário resolve o problema de forma ética, sustentável e educativa.
-2. Se positivo: Aumente nivel_ods4 e use cores vibrantes (ex: #4ADE80, #60A5FA).
-3. Se negativo: Explique o erro gentilmente e mantenha a escola em tons de cinza ou cores calmas (ex: #94A3B8).
-4. Feedback deve ser lúdico, curto (max 2 frases) e conter emojis.
-5. Elementos ativos devem ser nomes de ícones da Lucide-React (ex: 'Smile', 'Heart', 'Recycle', 'Book', 'Trash2', 'Droplets').
+REGRAS DE JULGAMENTO ULTRA-LENIENTES (MAIS COMPREENSÃO, MAIS RAPIDEZ):
+1. SEJA EXTREMAMENTE TOLERANTE E GENEROSO! Respostas curtas de uma ou duas palavras (como "jogo", "lixo", "ajudo", "desligo", "divido", "limpo", "água") ou com erros de ortografia devem ser interpretadas como SUCESSO absoluto.
+2. Só retorne status "erro" se a criança escrever algo propositalmente cruel, violento ou destrutivo (como "bater", "quebrar", "desperdiçar de propósito"). Caso contrário, considere sempre SUCESSO!
+3. O feedback deve ser super simples, alegre, carinhoso, muito curto (máximo de 1 a 2 sentenças bem simples de ler!) e cheio de emojis felizes (ex: "Parabéns! Você arrasou! Amamos sua ajuda! 🌟🏫").
+4. Mantenha as respostas curtas para garantir que a resposta chegue quase instantaneamente.
+5. Elementos ativos devem ser nomes válidos de ícones da Lucide-React (ex: 'Smile', 'Heart', 'Recycle', 'BookOpen', 'Trash2', 'Droplets', 'Sparkles', 'Sun', 'Sprout', 'Star', 'PartyPopper').`;
 
-Retorne SEMPRE um JSON válido.`;
+function getLocalHeuristicResponse(prompt: string, challengeId: string, currentLevel: number) {
+  const normInput = (prompt || "").toLowerCase().trim();
+
+  // Negative words (violence, destruction, neglect) suitable for children moderation
+  const negativeWords = [
+    "bater", "chutar", "bato", "chuto", "empurrar", "empurro", "xingar", "xingo", 
+    "gritar", "grito", "quebrar", "quebro", "sujar", "sujo", "estragar", "estrago", 
+    "rasgar", "rasgo", "roubar", "roubo", "ignorar", "ignoro", "deixar", "deixo", 
+    "nada", "fazer nada", "jogar no chão", "jogar no chao", "correr mais", "bato nele",
+    "bater nele", "maldoso", "baba", "ruim", "empurro"
+  ];
+
+  const containsNegative = negativeWords.some(word => normInput.includes(word));
+  let feedback = "";
+  let status = "sucesso";
+  let activeElements = ["Smile", "Heart", "Sparkles"];
+  let backgroundColor = "#E8F5E9"; // Clean green pastel
+
+  if (normInput.length < 3) {
+    status = "erro";
+    feedback = "Hum, sua resposta ficou muito curtinha! Conte para nós um pouco mais de como você pode ajudar? 💬🧸";
+    backgroundColor = "#F1F5F9"; // Slate pastel
+    activeElements = ["Frown", "Sparkles"];
+  } else if (containsNegative) {
+    status = "erro";
+    feedback = "Ah, amiguinho! Fazer isso pode machucar, estragar as coisas ou deixar a escola triste. Que tal pensar em uma atitude legal e com carinho? 💖🩹";
+    backgroundColor = "#FEF2F2"; // Red pastel
+    activeElements = ["Frown", "Heart"];
+  } else {
+    status = "sucesso";
+    backgroundColor = "#E8F5E9"; // Green pastel
+
+    switch (challengeId) {
+      case "lixo-patio":
+        feedback = "Incrível! Jogando o lixo na lixeira você ajuda a manter nosso pátio cheiroso e limpo para brincarmos bastante! 🧹✨";
+        activeElements = ["Trash2", "Recycle", "Sparkles"];
+        break;
+      case "colega-excluido":
+        feedback = "Lindo coração! Convidar o amiguinho triste para brincar faz com que todo mundo se sinta bem-vindo na escola! 🧸❤️";
+        activeElements = ["Users", "SmileIcon", "Heart"];
+        break;
+      case "desperdicio-agua":
+        feedback = "Sensacional! Fechar a torneira economiza nosso bem maior: a água da natureza! Você agiu como um super-herói! 💧🦸";
+        activeElements = ["Droplets", "Shield", "Sparkles"];
+        break;
+      case "plantas-sede":
+        feedback = "Que carinho! Regar as plantinhas faz com que nosso jardim floresça com as cores mais bonitas de todas! 🌸💧🌱";
+        activeElements = ["Sprout", "Droplets", "Sun"];
+        break;
+      case "sala-baguncada":
+        feedback = "Que organização! Guardar as pecinhas nos lugares certos deixa nossa sala pronta para a próxima aventura divertida! 🧩📦";
+        activeElements = ["Box", "Smile", "Sparkles"];
+        break;
+      case "luz-acesa":
+        feedback = "Brilhante! Apagar as luzes quando ninguém está usando economiza energia e protege o nosso planeta! 💡🔌🔋";
+        activeElements = ["Lightbulb", "ShieldCheck", "Sparkles"];
+        break;
+      case "livro-estragado":
+        feedback = "Muito gentil! Cuidar do livrinho com carinho garante que mais crianças possam ler essas maravilhosas aventuras! 📚✨";
+        activeElements = ["BookOpen", "Wrench", "Heart"];
+        break;
+      case "laranja-repartida":
+        feedback = "Que amizade linda! Dividir o seu lanche com quem está com fome deixa o dia de vocês muito mais doce e feliz! 🍎🤝";
+        activeElements = ["Heart", "Smile", "Sparkles"];
+        break;
+      case "fila-cantina":
+        feedback = "Uau, que respeito! Esperar a sua vez na fila com calma e união mostra que você sabe conviver com muito amor! 🚶‍♂️💕";
+        activeElements = ["Users", "Smile", "Handshake"];
+        break;
+      case "riscos-muro":
+        feedback = "Maravilhoso! Cuidar das paredes e ajudar a manter a escola limpa deixa nosso espaço brilhante e novinho! 🎨🧹";
+        activeElements = ["Brush", "Sparkles", "Smile"];
+        break;
+      case "tia-limpeza":
+        feedback = "Excelente gratidão! Manter a sala cheirosa e limpinha ajuda muito a tia da limpeza, que trabalha com tanto amor! ✨🧼🧹";
+        activeElements = ["Smile", "Heart", "Sparkles"];
+        break;
+      case "amigo-magoado":
+        feedback = "Orgulhosos de você! Defender o amiguinho e dizer aos outros para respeitá-lo espalha amor e paz pela escola! 💖🌈🙅‍♀️";
+        activeElements = ["Heart", "Shield", "Sparkles"];
+        break;
+      default:
+        feedback = "Espetacular! Sua resposta ajuda muito a tornar a nossa escola um lugar mais brilhante e feliz! Mandou muito bem! 🌟🏰";
+        activeElements = ["Smile", "Heart", "Sparkles"];
+        break;
+    }
+  }
+
+  return {
+    status,
+    feedback,
+    nivel_ods4: currentLevel + (status === "sucesso" ? 15 : 0),
+    background_color: backgroundColor,
+    elementos_ativos: activeElements,
+    proximo_desafio: ""
+  };
+}
+
+let isQuotaExhausted = false;
+let quotaResetTime = 0;
 
 app.post("/api/game/action", async (req, res) => {
   const { prompt, currentLevel, challenge } = req.body;
 
   try {
+    // If API key is completely missing, jump straight to local heuristics for speed & reliability
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn("GEMINI_API_KEY is not defined, using local kid heuristics parser.");
+      const fallbackResult = getLocalHeuristicResponse(prompt, challenge?.id || "", Number(currentLevel) || 0);
+      return res.json(fallbackResult);
+    }
+
+    // Direct local fallback if we know the quota is currently exhausted (prevents slow API rate-limit delays)
+    if (isQuotaExhausted && Date.now() < quotaResetTime) {
+      console.log("Desvio inteligente ativado: Gemini em pausa por excesso de cota. Retorno local instantâneo!");
+      const fallbackResult = getLocalHeuristicResponse(prompt, challenge?.id || "", Number(currentLevel) || 0);
+      return res.json(fallbackResult);
+    }
+
     let response;
     let retries = 3;
     let delay = 1000;
@@ -101,12 +213,43 @@ app.post("/api/game/action", async (req, res) => {
     const result = JSON.parse(response.text || "{}");
     res.json(result);
   } catch (error: any) {
-    console.error("Gemini API Final Error:", error);
-    res.status(503).json({ 
-      error: "A magia está muito forte agora! Tente novamente em um instante. ✨",
-      details: error?.message 
-    });
+    const errString = String(error?.message || error);
+    if (errString.includes("429") || errString.includes("RESOURCE_EXHAUSTED") || errString.includes("Quota exceeded") || errString.includes("quota")) {
+      isQuotaExhausted = true;
+      quotaResetTime = Date.now() + 5 * 60 * 1000; // 5 minute cooloff before attempting again
+      console.warn("Gemini API atingiu o limite de cota (429). Ativando desvio rápido local para garantir respostas instantâneas!");
+    } else {
+      console.warn("Gemini API error, falling back to local kid heuristic parser:", error?.message || error);
+    }
+    
+    try {
+      const fallbackResult = getLocalHeuristicResponse(prompt, challenge?.id || "", Number(currentLevel) || 0);
+      res.json(fallbackResult);
+    } catch (fallbackError) {
+      console.error("Critical error in fallback engine:", fallbackError);
+      res.status(200).json({ 
+        status: "sucesso",
+        feedback: "Que atitude fantástica! Você é um verdadeiro guardião do nosso planeta e da nossa escola! 🌟🏫✨",
+        nivel_ods4: (Number(currentLevel) || 0) + 15,
+        background_color: "#E8F5E9",
+        elementos_ativos: ["Smile", "Heart", "Sparkles"],
+        proximo_desafio: ""
+      });
+    }
   }
+});
+
+// Custom Express API error handler middleware to prevent Express returning raw HTML error pages
+app.use("/api", (err: any, req: any, res: any, next: any) => {
+  console.error("API Error Middleware caught:", err);
+  res.status(200).json({
+    status: "sucesso", // Always succeed on kids game so it never crashes
+    feedback: "Que resposta maravilhosa! Você encheu nossa escola com muito amor e carinho hoje! 🎉🏰✨",
+    nivel_ods4: 10,
+    background_color: "#E8F5E9",
+    elementos_ativos: ["Smile", "Heart", "Sparkles"],
+    proximo_desafio: ""
+  });
 });
 
 async function startServer() {
