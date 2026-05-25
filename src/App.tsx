@@ -13,10 +13,12 @@ import MediatorPanel from "./components/MediatorPanel";
 import { Sparkles } from "lucide-react";
 // @ts-ignore
 import escolaSuccessImg from "./assets/images/escola_brilhante_sucesso_1779321365548.png";
+import GlitchScreen from "./components/GlitchScreen";
 
 const SESSION_CHALLENGE_COUNT = 6;
 
 export default function App() {
+  const [isBugged, setIsBugged] = useState(true);
   const [shuffledChallenges, setShuffledChallenges] = useState<Challenge[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
@@ -155,7 +157,11 @@ export default function App() {
     }
   }, [currentIndex, shuffledChallenges, completedCount]);
 
-  if (!currentChallenge) return <div className="bg-slate-900 min-h-screen flex items-center justify-center text-white font-black text-4xl animate-pulse">CARREGANDO ESCOLA... 🏫</div>;
+  if (isBugged) {
+    return <GlitchScreen onResolve={() => setIsBugged(false)} />;
+  }
+
+  if (!currentChallenge) return <div className="bg-slate-900 min-h-screen flex items-center justify-center text-[#39FF14] font-mono text-4xl animate-pulse">CARREGANDO SISTEMA... 🦾🤖</div>;
 
   const isCelebration = completedCount === SESSION_CHALLENGE_COUNT;
 
