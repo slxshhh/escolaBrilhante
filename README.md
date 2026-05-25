@@ -61,4 +61,4 @@ O desenvolvimento deste projeto envolveu grandes desafios técnicos de design re
 5. Abra o navegador no endereço indicado (geralmente `http://localhost:3000`) para brincar!
 
 ---
-[Voltar ao início](https://github.com/seu-usuario/escola-brilhante)
+[Voltar ao início](https://github.com/slxshhh)
