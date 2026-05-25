@@ -5,19 +5,20 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { GameState, Challenge, INITIAL_CHALLENGES, GameStatus } from "./types";
+import { GameState, Challenge, INITIAL_CHALLENGES, GameStatus, CLASSROOMS, ClassroomLevel } from "./types";
 import ProgressBar from "./components/ProgressBar";
 import Scenario from "./components/Scenario";
 import NarrativeBubble from "./components/NarrativeBubble";
 import MediatorPanel from "./components/MediatorPanel";
-import { Sparkles } from "lucide-react";
+import { Sparkles, RotateCcw } from "lucide-react";
 // @ts-ignore
-import escolaSuccessImg from "./assets/images/escola_brilhante_sucesso_1779321365548.png";
+import escolaSuccessImg from "./assets/images/colegio_floresta_sucesso_1779732904503.png";
 import GlitchScreen from "./components/GlitchScreen";
 
 const SESSION_CHALLENGE_COUNT = 6;
 
 export default function App() {
+  const [selectedClassroom, setSelectedClassroom] = useState<ClassroomLevel | null>(null);
   const [isBugged, setIsBugged] = useState(true);
   const [shuffledChallenges, setShuffledChallenges] = useState<Challenge[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,6 +82,16 @@ export default function App() {
     setRefreshKey(prev => prev + 1);
   };
 
+  const handleRollbackToMenu = () => {
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
+    }
+    setIsWaitingTransition(false);
+    setSelectedClassroom(null);
+    setIsBugged(true);
+  };
+
   const handleAction = async (input: string) => {
     if (!currentChallenge) return;
     
@@ -93,6 +104,7 @@ export default function App() {
           prompt: input,
           currentLevel: gameState.nivel_ods4,
           challenge: currentChallenge,
+          grade: selectedClassroom?.id || "5_ano",
         }),
       });
 
@@ -158,7 +170,10 @@ export default function App() {
   }, [currentIndex, shuffledChallenges, completedCount]);
 
   if (isBugged) {
-    return <GlitchScreen onResolve={() => setIsBugged(false)} />;
+    return <GlitchScreen onResolve={(classroom) => {
+      setSelectedClassroom(classroom);
+      setIsBugged(false);
+    }} />;
   }
 
   if (!currentChallenge) return <div className="bg-slate-900 min-h-screen flex items-center justify-center text-[#39FF14] font-mono text-4xl animate-pulse">CARREGANDO SISTEMA... 🦾🤖</div>;
@@ -166,8 +181,47 @@ export default function App() {
   const isCelebration = completedCount === SESSION_CHALLENGE_COUNT;
 
   return (
-    <div className="min-h-screen overflow-hidden font-sans select-none">
+    <div className="min-h-screen overflow-hidden font-sans select-none relative">
       <ProgressBar level={gameState.nivel_ods4} onClick={handleProgressClick} />
+      
+      {/* Dynamic Classroom Badge Overlay with Rollback Action */}
+      {selectedClassroom && (
+        <div className="fixed top-24 left-4 z-40 flex flex-row items-center gap-2 select-none">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-slate-900/95 backdrop-blur-md shadow-2xl px-5 py-2.5 rounded-2xl border flex items-center gap-3 transition-colors"
+            style={{ borderColor: `${selectedClassroom.themeColor}dd` }}
+          >
+            <div className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
+              <span className="relative inline-flex rounded-full h-3 w-3" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
+            </div>
+            <div>
+              <span className="text-white font-extrabold text-xs block leading-none antialiased">
+                TURMA: {selectedClassroom.name} 🎒
+              </span>
+              <span className="text-slate-400 text-[10px] font-mono leading-none mt-1 block uppercase">
+                Foco: {selectedClassroom.difficulty}
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Rollback to main classroom triage menu */}
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleRollbackToMenu}
+            className="cursor-pointer bg-slate-950/90 hover:bg-[#39FF14] text-[#39FF14] hover:text-slate-950 px-4 py-3 rounded-2xl border border-slate-800 hover:border-[#39FF14] shadow-2xl flex items-center gap-2 font-mono text-[11px] font-black uppercase tracking-wider transition-all"
+            title="Mudar de sala"
+          >
+            <RotateCcw className="w-3.5 h-3.5 animate-spin-reverse" />
+            <span className="hidden sm:inline">Trocar de Sala</span>
+          </motion.button>
+        </div>
+      )}
       
       <Scenario 
         backgroundColor={gameState.background_color} 
@@ -206,27 +260,38 @@ export default function App() {
             >
               <img 
                 src={escolaSuccessImg} 
-                alt="Escola Brilhante Limpa e Feliz" 
+                alt="Colégio Floresta Limpo e Feliz" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute top-3 right-3 bg-yellow-400 text-white font-bold text-xs px-3 py-1 rounded-full animate-bounce shadow">
-                BRILHANTE! 🌟
+              <div className="absolute top-3 right-3 bg-blue-500 text-white font-black text-xs px-3 py-1.5 rounded-full animate-bounce shadow-lg">
+                COLÉGIO FLORESTA! 🌟
               </div>
             </motion.div>
             
             <p className="text-lg sm:text-xl font-bold text-slate-700 leading-relaxed mb-6 px-2">
-              Parabéns, Amigos! A nossa escola está <span className="text-emerald-500">100% Brilhante</span>, limpa, organizada e cheia de flores e alegria por causa do carinho de vocês! Vocês são os verdadeiros guardiões do nosso lindo planeta! 🌈🌸🍃
+              Parabéns, Amigos do <span className="text-blue-600 font-extrabold">Colégio Floresta</span>! A nossa escola está <span className="text-emerald-500 font-extrabold">100% Brilhante</span>, limpa, organizada e cheia de flores e alegria por causa do carinho de todos vocês! Vocês são os verdadeiros guardiões do nosso lindo planeta! 🌈🌸🍃
             </p>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={restartGame}
-              className="px-8 py-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-500 text-white font-black text-xl rounded-[2rem] shadow-[0_12px_25px_-5px_rgba(245,158,11,0.5)] border-4 border-white bouncy-btn flex items-center gap-3 mx-auto cursor-pointer"
-            >
-              Jogar de Novo! 🔄
-            </motion.button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={restartGame}
+                className="px-8 py-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-500 text-white font-black text-lg rounded-[2rem] shadow-[0_12px_25px_-5px_rgba(245,158,11,0.5)] border-4 border-white bouncy-btn flex items-center gap-3 cursor-pointer"
+              >
+                Jogar de Novo! 🔄
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleRollbackToMenu}
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-black text-lg rounded-[2rem] shadow-[0_12px_25px_-5px_rgba(59,130,246,0.5)] border-4 border-white bouncy-btn flex items-center gap-3 cursor-pointer"
+              >
+                Próxima Sala / Novo Jogo 🎒
+              </motion.button>
+            </div>
           </motion.div>
         </div>
       ) : (

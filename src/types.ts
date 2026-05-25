@@ -19,6 +19,64 @@ export interface Challenge {
   initialIcons: string[];
 }
 
+export interface ClassroomLevel {
+  id: string;
+  name: string;
+  time: string;
+  age: string;
+  difficulty: "super_ludico" | "ludico" | "intermediario" | "colaborativo" | "critico";
+  description: string;
+  themeColor: string;
+}
+
+export const CLASSROOMS: ClassroomLevel[] = [
+  {
+    id: "5_ano",
+    name: "5º Ano A",
+    time: "08h30",
+    age: "10 anos",
+    difficulty: "critico",
+    description: "CIDADANIA ATIVA E EMPATIA PROFUNDA. Ideal para pré-adolescentes, avaliando colaborações mais elaboradas e ações éticas.",
+    themeColor: "#8B5CF6", // Purple
+  },
+  {
+    id: "4_ano",
+    name: "4º Ano A",
+    time: "09h00",
+    age: "9 anos",
+    difficulty: "colaborativo",
+    description: "UNIÃO E SUSTENTABILIDADE. Foco em soluções ecológicas, trabalho em equipe e respeito mútuo.",
+    themeColor: "#3B82F6", // Blue
+  },
+  {
+    id: "3_ano",
+    name: "3º Ano A",
+    time: "09h30",
+    age: "8 anos",
+    difficulty: "intermediario",
+    description: "EQUILÍBRIO LÚDICO-PRÁTICO. Estimula bons hábitos diários misturando lógica simples com diversão.",
+    themeColor: "#10B981", // Emerald
+  },
+  {
+    id: "2_ano",
+    name: "2º Ano A",
+    time: "10h00",
+    age: "7 anos",
+    difficulty: "ludico",
+    description: "MUNDO COLORIDO DO CUIDADO. Foco no embelezamento do jardim, carinho com os amigos e economia mágica de água.",
+    themeColor: "#F59E0B", // Amber
+  },
+  {
+    id: "1_ano",
+    name: "1º Ano A",
+    time: "10h30",
+    age: "6 anos",
+    difficulty: "super_ludico",
+    description: "AVENTURA ENCANTADA DOS SENTIMENTOS. Superindulgente com emojis gigantes, fadas e magias de proteção escolar.",
+    themeColor: "#EC4899", // Pink
+  }
+];
+
 export const INITIAL_CHALLENGES: Challenge[] = [
   {
     id: "lixo-patio",
