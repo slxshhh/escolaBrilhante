@@ -184,29 +184,6 @@ export default function Scenario({ backgroundColor, elements, level, refreshKey 
         />
       ))}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 lg:gap-16 p-8 sm:p-20 relative z-10 w-full max-w-7xl">
-        <AnimatePresence mode="popLayout">
-          {elements.map((iconName, index) => {
-            // @ts-ignore
-            const IconComponent = Icons[iconName] || Icons.Sparkles;
-            return (
-              <motion.div
-                key={`${iconName}-${index}`}
-                initial={{ scale: 0, rotate: -30, y: 150 }}
-                animate={{ scale: 1, rotate: 0, y: 0 }}
-                exit={{ scale: 0.5, opacity: 0, y: -100 }}
-                transition={{ type: "spring", damping: 15, stiffness: 100 }}
-                className="flex items-center justify-center"
-              >
-                <div className="bg-white/80 backdrop-blur-2xl p-10 sm:p-14 rounded-[4.5rem] shadow-[0_30px_70px_-15px_rgba(0,0,0,0.2)] border-[12px] border-white magic-glow floating transition-colors duration-1000" style={{ animationDelay: `${index * 0.4}s` }}>
-                  <IconComponent className="w-20 h-20 sm:w-28 sm:h-28 lg:w-40 lg:h-40" color={isHigh ? "#10b981" : level > 30 ? "#3b82f6" : "#64748b"} strokeWidth={3} />
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
-      
       {/* Background patterns */}
       <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#fff_4px,transparent_4px)] [background-size:120px_120px]"></div>

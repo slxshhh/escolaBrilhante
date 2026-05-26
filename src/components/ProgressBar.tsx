@@ -1,12 +1,15 @@
 import { motion, AnimatePresence } from "motion/react";
 import React, { useState } from "react";
+import { RotateCcw } from "lucide-react";
 
 interface ProgressBarProps {
   level: number;
   onClick?: () => void;
+  selectedClassroom?: { name: string; themeColor: string; difficulty: string } | null;
+  onRollback?: () => void;
 }
 
-export default function ProgressBar({ level, onClick }: ProgressBarProps) {
+export default function ProgressBar({ level, onClick, selectedClassroom, onRollback }: ProgressBarProps) {
   const [clickParticles, setClickParticles] = useState<{ id: number; x: number; y: number }[]>([]);
   const isMessy = level < 30;
   const isRecovering = level >= 30 && level < 70;
@@ -102,6 +105,47 @@ export default function ProgressBar({ level, onClick }: ProgressBarProps) {
             </span>
           </div>
         </div>
+
+        {selectedClassroom && (
+          <div 
+            className="flex items-center gap-1.5 sm:gap-2 select-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div 
+              className="bg-slate-900/95 shadow-lg px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-xl border flex items-center gap-2 text-white border-slate-700 max-h-12"
+              style={{ borderColor: `${selectedClassroom.themeColor}aa` }}
+            >
+              <div className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
+              </div>
+              <div className="text-left shrink-0 max-w-[80px] sm:max-w-[120px] overflow-hidden">
+                <span className="font-extrabold text-[9px] sm:text-[11px] block leading-none antialiased truncate">
+                  {selectedClassroom.name} 🎒
+                </span>
+                <span className="text-slate-400 text-[7px] sm:text-[8px] font-mono leading-none mt-0.5 block uppercase truncate">
+                  {selectedClassroom.difficulty}
+                </span>
+              </div>
+            </div>
+
+            {onRollback && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRollback();
+                }}
+                className="cursor-pointer bg-slate-950 hover:bg-[#39FF14] text-[#39FF14] hover:text-slate-950 px-2.5 py-2.5 sm:px-3 sm:py-2 rounded-xl border border-slate-800 hover:border-[#39FF14] shadow-md flex items-center gap-1 font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all h-10 shrink-0"
+                title="Mudar de sala"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span className="hidden md:inline">Trocar de Sala</span>
+              </motion.button>
+            )}
+          </div>
+        )}
 
         <div className="flex -space-x-3 hidden sm:flex">
           {['🌈', '🚀', '🎨'].map((emoji, i) => (

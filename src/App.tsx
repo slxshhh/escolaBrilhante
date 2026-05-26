@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
-import { GameState, Challenge, INITIAL_CHALLENGES, GameStatus, CLASSROOMS, ClassroomLevel } from "./types";
+import { GameState, Challenge, INITIAL_CHALLENGES, CHALLENGE_PAIRS, GameStatus, CLASSROOMS, ClassroomLevel } from "./types";
 import ProgressBar from "./components/ProgressBar";
 import Scenario from "./components/Scenario";
 import NarrativeBubble from "./components/NarrativeBubble";
@@ -46,12 +46,47 @@ export default function App() {
     setCurrentIndex((prev) => prev + 1);
   };
 
+  const initGameForClassroom = (classroom: ClassroomLevel) => {
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
+    }
+    setIsWaitingTransition(false);
+
+    // Shuffle indices 0..5 randomly so sequence is varied
+    const indices = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
+    const isKinder = classroom.id === "1_ano" || classroom.id === "2_ano";
+
+    const selectedChallenges = indices.map(idx => {
+      const pair = CHALLENGE_PAIRS[idx];
+      return pair[isKinder ? 0 : 1];
+    });
+
+    setShuffledChallenges(selectedChallenges);
+    setCurrentIndex(0);
+    setCompletedCount(0);
+    setGameState({
+      status: GameStatus.SUCESSO,
+      feedback: selectedChallenges[0].description,
+      nivel_ods4: 0,
+      background_color: "#E0F2FE",
+      elementos_ativos: selectedChallenges[0].initialIcons,
+      proximo_desafio: selectedChallenges[0].description
+    });
+  };
+
   const restartGame = () => {
     if (transitionTimerRef.current) {
       clearTimeout(transitionTimerRef.current);
       transitionTimerRef.current = null;
     }
     setIsWaitingTransition(false);
+
+    if (selectedClassroom) {
+      initGameForClassroom(selectedClassroom);
+      return;
+    }
+
     const shuffled = [...INITIAL_CHALLENGES].sort(() => Math.random() - 0.5).slice(0, SESSION_CHALLENGE_COUNT);
     setShuffledChallenges(shuffled);
     setCurrentIndex(0);
@@ -173,6 +208,7 @@ export default function App() {
     return <GlitchScreen onResolve={(classroom) => {
       setSelectedClassroom(classroom);
       setIsBugged(false);
+      initGameForClassroom(classroom);
     }} />;
   }
 
@@ -182,46 +218,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen overflow-hidden font-sans select-none relative">
-      <ProgressBar level={gameState.nivel_ods4} onClick={handleProgressClick} />
-      
-      {/* Dynamic Classroom Badge Overlay with Rollback Action */}
-      {selectedClassroom && (
-        <div className="fixed top-24 left-4 z-40 flex flex-row items-center gap-2 select-none">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-slate-900/95 backdrop-blur-md shadow-2xl px-5 py-2.5 rounded-2xl border flex items-center gap-3 transition-colors"
-            style={{ borderColor: `${selectedClassroom.themeColor}dd` }}
-          >
-            <div className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
-              <span className="relative inline-flex rounded-full h-3 w-3" style={{ backgroundColor: selectedClassroom.themeColor }}></span>
-            </div>
-            <div>
-              <span className="text-white font-extrabold text-xs block leading-none antialiased">
-                TURMA: {selectedClassroom.name} 🎒
-              </span>
-              <span className="text-slate-400 text-[10px] font-mono leading-none mt-1 block uppercase">
-                Foco: {selectedClassroom.difficulty}
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Rollback to main classroom triage menu */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleRollbackToMenu}
-            className="cursor-pointer bg-slate-950/90 hover:bg-[#39FF14] text-[#39FF14] hover:text-slate-950 px-4 py-3 rounded-2xl border border-slate-800 hover:border-[#39FF14] shadow-2xl flex items-center gap-2 font-mono text-[11px] font-black uppercase tracking-wider transition-all"
-            title="Mudar de sala"
-          >
-            <RotateCcw className="w-3.5 h-3.5 animate-spin-reverse" />
-            <span className="hidden sm:inline">Trocar de Sala</span>
-          </motion.button>
-        </div>
-      )}
+      <ProgressBar 
+        level={gameState.nivel_ods4} 
+        onClick={handleProgressClick} 
+        selectedClassroom={selectedClassroom}
+        onRollback={handleRollbackToMenu}
+      />
       
       <Scenario 
         backgroundColor={gameState.background_color} 

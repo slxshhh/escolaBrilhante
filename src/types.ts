@@ -77,77 +77,97 @@ export const CLASSROOMS: ClassroomLevel[] = [
   }
 ];
 
-export const INITIAL_CHALLENGES: Challenge[] = [
-  {
-    id: "lixo-patio",
-    title: "Lixo no Pátio 🍬",
-    description: "O recreio acabou e deixaram papéis de bala e copos de plástico jogados no chão. O que devemos fazer?",
-    initialIcons: ["Trash2", "Wind"],
-  },
-  {
-    id: "colega-excluido",
-    title: "Amigo Sozinho 🧸",
-    description: "Um amiguinho novo está sentado sozinho no banco triste enquanto todos brincam. Qual a melhor atitude?",
-    initialIcons: ["Users", "Frown"],
-  },
-  {
-    id: "desperdicio-agua",
-    title: "Torneira Aberta 💧",
-    description: "Alguém esqueceu a torneira do banheiro aberta e a água está correndo toda fora. Como ajudar?",
-    initialIcons: ["Droplets", "Brush"],
-  },
-  {
-    id: "plantas-sede",
-    title: "Flores com Sede 🌱",
-    description: "As florzinhas do jardim da escola estão caídas e com muita sede nesse dia de sol. O que você faz?",
-    initialIcons: ["Sprout", "Sun"],
-  },
-  {
-    id: "sala-baguncada",
-    title: "Brinquedos Espalhados 🧩",
-    description: "Depois de brincar com pecinhas e blocos, a sala ficou toda bagunçada. Como organizar?",
-    initialIcons: ["Box", "Smile"],
-  },
-  {
-    id: "luz-acesa",
-    title: "Luz Ligada 💡",
-    description: "A aula ja acabou e a sala está vazia, mas as lâmpadas continuam todas acesas. O que fazer?",
-    initialIcons: ["Lightbulb", "Zap"],
-  },
-  {
-    id: "livro-estragado",
-    title: "Livro da Biblioteca 📚",
-    description: "Você achou um livro de historinhas com as páginas descolando no meio da mesa. Como cuidar dele?",
-    initialIcons: ["BookOpen", "Sparkles"],
-  },
-  {
-    id: "laranja-repartida",
-    title: "Lanche do Amigo 🍎",
-    description: "Um colega esqueceu o lanchinho dele hoje e a barriga dele está roncando com fome. Como ajudar?",
-    initialIcons: ["Heart", "Smile"],
-  },
-  {
-    id: "fila-cantina",
-    title: "Fila da Cantina 🚶",
-    description: "Algumas crianças estão correndo e empurrando todo mundo para passar na frente na fila. Como agir?",
-    initialIcons: ["Handshake", "Users"],
-  },
-  {
-    id: "riscos-muro",
-    title: "Riscos na Parede 🎨",
-    description: "Alguém rabiscou a parede branquinha da nossa escola com caneta. Como podemos ajudar a cuidar da escola?",
-    initialIcons: ["Sparkles", "Brush"],
-  },
-  {
-    id: "tia-limpeza",
-    title: "Tia da Limpeza ✨",
-    description: "A tia da limpeza limpou toda a nossa sala e deixou ela cheirosa. Como ajudar a manter assim?",
-    initialIcons: ["Trash2", "Smile"],
-  },
-  {
-    id: "amigo-magoado",
-    title: "Apelido Chato 🙅",
-    description: "Estão colocando um apelido bobo em um amiguinho que deixou ele de cabeça baixa. O que você faz?",
-    initialIcons: ["Heart", "Smile"],
-  }
+export const CHALLENGE_PAIRS: [Challenge, Challenge][] = [
+  // Pair 0: Lixo / Limpeza
+  [
+    {
+      id: "lixo-patio",
+      title: "Lixo no Pátio 🍬",
+      description: "O papel de bala caiu no chão do recreio. Onde nós devemos jogar esse lixo para deixar nossa escola linda?",
+      initialIcons: ["Trash2", "Wind"],
+    },
+    {
+      id: "tia-limpeza",
+      title: "Tia da Limpeza ✨",
+      description: "O pessoal da limpeza deixou nossa sala brilhando e cheirosa! O que nossa turma pode fazer para manter tudo limpo até o final da aula?",
+      initialIcons: ["Trash2", "Smile"],
+    }
+  ],
+  // Pair 1: Água / Energia
+  [
+    {
+      id: "desperdicio-agua",
+      title: "Torneira Aberta 💧",
+      description: "Olha só! Alguém esqueceu a torneira pingando gotinhas de água. O que nós podemos fazer bem rápido?",
+      initialIcons: ["Droplets", "Brush"],
+    },
+    {
+      id: "luz-acesa",
+      title: "Luz Ligada 💡",
+      description: "A aula acabou e todo mundo saiu, mas as luzes e o ventilador continuavam ligados na sala vazia. O que devemos fazer para ajudar a economizar energia?",
+      initialIcons: ["Lightbulb", "Zap"],
+    }
+  ],
+  // Pair 2: Plantas / Muros
+  [
+    {
+      id: "plantas-sede",
+      title: "Flores com Sede 🌱",
+      description: "O sol está muito quente e as florzinhas do jardim estão murchas e com sede. Como nós podemos ajudar elas?",
+      initialIcons: ["Sprout", "Sun"],
+    },
+    {
+      id: "riscos-muro",
+      title: "Riscos na Parede 🎨",
+      description: "Alguém rabiscou com caneta a parede branquinha do corredor da escola. Como podemos ajudar a cuidar do nosso espaço para a escola continuar alegre?",
+      initialIcons: ["Sparkles", "Brush"],
+    }
+  ],
+  // Pair 3: Organização / Materiais
+  [
+    {
+      id: "sala-baguncada",
+      title: "Brinquedos Espalhados 🧩",
+      description: "A hora do brinquedo terminou e as pecinhas ficaram espalhadas por todo o chão da sala. O que fazemos agora?",
+      initialIcons: ["Box", "Smile"],
+    },
+    {
+      id: "livro-estragado",
+      title: "Livro da Biblioteca 📚",
+      description: "Você foi ler na biblioteca e achou um livro de historinhas com as páginas soltas e rasgos. Como nossa turma pode ajudar a salvar os nossos livros?",
+      initialIcons: ["BookOpen", "Sparkles"],
+    }
+  ],
+  // Pair 4: Amizade / Cooperação em Fila
+  [
+    {
+      id: "colega-excluido",
+      title: "Amigo Sozinho 🧸",
+      description: "Um amiguinho novo está sentado no banco bem triste e sozinho. Qual atitude alegre nós podemos tomar?",
+      initialIcons: ["Users", "Frown"],
+    },
+    {
+      id: "fila-cantina",
+      title: "Fila da Cantina 🚶",
+      description: "Na hora do lanche, alguns colegas estão correndo, empurrando e passando na frente na fila da merenda. O que podemos fazer para que a fila seja organizada e justa?",
+      initialIcons: ["Handshake", "Users"],
+    }
+  ],
+  // Pair 5: Compartilhar / Anti-Bullying
+  [
+    {
+      id: "laranja-repartida",
+      title: "Dividir o Lanchinho 🍎",
+      description: "Seu amiguinho esqueceu a lancheira em casa e está com fome na hora do lanche. O que você pode fazer de coração?",
+      initialIcons: ["Heart", "Smile"],
+    },
+    {
+      id: "amigo-magoado",
+      title: "Apelido Chato 🙅",
+      description: "Alguns colegas inventaram um apelido bobo para um amigo, e ele ficou bem triste no cantinho com a cabeça baixa. O que podemos fazer para ajudar esse amigo?",
+      initialIcons: ["Heart", "Smile"],
+    }
+  ]
 ];
+
+export const INITIAL_CHALLENGES: Challenge[] = CHALLENGE_PAIRS.flatMap(p => p);

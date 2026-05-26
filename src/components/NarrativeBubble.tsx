@@ -32,19 +32,19 @@ export default function NarrativeBubble({ feedback, loading, theme, isWaitingTra
             animate={{ y: 0, scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ type: "spring", damping: 10, stiffness: 100 }}
-            className={`p-10 sm:p-14 rounded-[4rem] sm:rounded-[5rem] shadow-[0_35px_80px_-10px_rgba(0,0,0,0.25)] backdrop-blur-2xl border-[10px] relative pointer-events-auto
-              ${theme === 'white' ? 'bg-white/95 border-white' : 'bg-slate-900/95 border-slate-700'}
+            className={`p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] backdrop-blur-xl border-4 sm:border-8 relative pointer-events-auto
+              ${theme === 'white' ? 'bg-white/90 border-white' : 'bg-slate-900/90 border-slate-700'}
             `}
           >
-            <p className={`text-2xl sm:text-4xl md:text-5xl text-center leading-tight font-black tracking-tight
-              ${theme === 'white' ? 'text-slate-800' : 'text-white'}
+            <p className={`text-sm sm:text-lg md:text-2xl text-center leading-normal font-black tracking-normal
+              ${theme === 'white' ? 'text-slate-800' : 'text-slate-100'}
             `}>
               {feedback}
             </p>
 
             {isWaitingTransition && onNext && (
               <motion.div
-                className="flex justify-center mt-6"
+                className="flex justify-center mt-4"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", damping: 12 }}
@@ -55,7 +55,7 @@ export default function NarrativeBubble({ feedback, loading, theme, isWaitingTra
                     e.stopPropagation();
                     onNext();
                   }}
-                  className="px-8 py-3 sm:px-12 sm:py-4 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 text-white font-black text-xl sm:text-2xl rounded-full shadow-[0_12px_30px_rgba(16,185,129,0.35)] border-4 border-white cursor-pointer active:scale-95 hover:scale-105 transition-transform duration-100 flex items-center gap-2 pointer-events-auto animate-pulse"
+                  className="px-6 py-2 sm:px-8 sm:py-3 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400 text-white font-black text-xs sm:text-base rounded-full shadow-lg border-2 sm:border-4 border-white cursor-pointer active:scale-95 hover:scale-105 transition-transform duration-100 flex items-center gap-1.5 pointer-events-auto"
                 >
                   Avançar ➡️
                 </button>
@@ -63,8 +63,8 @@ export default function NarrativeBubble({ feedback, loading, theme, isWaitingTra
             )}
 
             {/* Playful tail */}
-            <div className={`absolute -bottom-10 left-1/2 -translate-x-1/2 w-20 h-20 rotate-45 border-r-[10px] border-b-[10px]
-              ${theme === 'white' ? 'bg-white/95 border-white' : 'bg-slate-900/95 border-slate-700'}
+            <div className={`absolute -bottom-3 left-1/2 -translate-x-1/2 w-8 h-8 rotate-45 border-r-[4px] border-b-[4px] sm:border-r-[8px] sm:border-b-[8px]
+              ${theme === 'white' ? 'bg-white/90 border-white' : 'bg-slate-900/90 border-slate-700'}
             `} />
           </motion.div>
         ) : null}

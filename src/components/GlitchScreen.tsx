@@ -30,16 +30,16 @@ export default function GlitchScreen({ onResolve }: GlitchScreenProps) {
   const getMissionText = (gradeId: string) => {
     switch (gradeId) {
       case "1_ano":
-        return "✨ ALÔ ALÔ, PEQUENOS AMIGOS DO 1º ANO A! ✨ Nós somos cientistas da computação e criamos um supercomputador mágico para construir a 'Escola Mais Brilhante do Mundo'. Mas deu um BUG! O sistema travou porque as máquinas não entendem o amor de vocês. Somente os sorrisos e abraços bem apertados da turma de vocês podem salvar as florzinhas! Aceitam o convite de mágica?";
+        return "✨ ALÔ 1º ANO A! ✨ O computador mágico do Colégio travou! Só o amor e o sorriso de vocês podem salvar as florzinhas do pátio! 🌸💖 Querem fazer mágica com a gente?";
       case "2_ano":
-        return "✨ OLÁ GRANDE CLÃ DO 2º ANO A! ✨ Nós somos detetives de computadores e criamos uma máquina inteligente para a 'Escola Mais Brilhante do Mundo'. Mas deu um BUG! Ela travou porque não sabe como consertar as plantinhas do jardim e fazer as pazes sozinha. Somente com a gentileza e o superpoder de vocês podemos destravar o sistema. Aceitam essa nobre missão de amor?";
+        return "🌱 ALERTA 2º ANO A! 🌱 Nossa máquina de cuidar da escola pegou um bug! Ela esqueceu como ter carinho com os amigos e com as plantas. 🧸💧 Vamos usar o poder da amizade para destravar?";
       case "3_ano":
-        return "💡 ATENÇÃO, QUERIDO 3º ANO A! 💡 Somos cientistas de tecnologia e criamos um supercomputador inovador para a 'Escola Mais Brilhante do Mundo'. Mas ocorreu um BUG crítico! O sistema bloqueou porque detectou pequenos egoísmos na escola e somente o trabalho colaborativo inteligente de mentes humanas reais como as de vocês podem decifrar este código da ODS 4. Aceitam a missão de resgate?";
+        return "💡 ATENÇÃO, 3º ANO A! 💡 Nosso supercomputador travou! Ele precisa do trabalho em equipe de vocês para decifrar as regras de união e bons hábitos. 🎒🏫 Prontos para essa missão?";
       case "4_ano":
-        return "🚨 ATENÇÃO COOPERAÇÃO DO 4º ANO A! 🚨 Somos cientistas da computação e programamos nossa IA para gerar a 'Escola Mais Brilhante do Mundo', mas ela deu um BUG de Empatia! O núcleo principal travou porque encontrou desordem e exclusão que só humanos sabem resolver com sabedoria. Precisamos do julgamento justo da turma de vocês para desativar os erros. Topam decifrar a ODS 4?";
+        return "🚨 ATENÇÃO, 4º ANO A! 🚨 O sistema travou por falta de empatia e união! Precisamos do julgamento dinâmico da turma para reciclar o lixo e ajudar os colegas. 🤝🛡️ Topam o desafio da ODS 4?";
       case "5_ano":
       default:
-        return "💻 ALERTA CRÍTICO: LIDERANÇAS DO 5º ANO A! 💻 Nós somos cientistas e criamos uma superestrutura computadorizada para planejar a 'Escola Mais Brilhante do Mundo'. Mas tivemos um BUG completo! O sistema entrou em lockdown porque detectou falhas éticas e problemas de convivência que algoritmos frios não conseguem solucionar sozinhos. Precisamos da cidadania e inteligência ativa de vocês para reescrever as regras da ODS 4. Aceitam destravar o sistema?";
+        return "💻 ALERTA CRÍTICO: LIDERANÇAS DO 5º ANO A! 💻 O planejador da Escola Brilhante entrou em lockdown por falta de ética e convivência saudável. 🏫📡 Precisamos da cidadania ativa de vocês para reescrever as regras!";
     }
   };
 
@@ -228,12 +228,7 @@ export default function GlitchScreen({ onResolve }: GlitchScreenProps) {
                     <span className="inline-block w-2.5 h-4 bg-[#39FF14] ml-1 animate-blink" />
                   </div>
 
-                  <div 
-                    className="absolute -top-3.5 right-6 text-slate-950 text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 transition-all"
-                    style={{ backgroundColor: activeClassroom.themeColor }}
-                  >
-                    MISSÃO DESTINADA AO {activeClassroom.name} 🎒
-                  </div>
+                
                 </div>
 
                 {/* Big Magical trigger button */}
