@@ -23,37 +23,34 @@ const ai = new GoogleGenAI({
 function getSystemInstructionForGrade(gradeId: string): string {
   switch (gradeId) {
     case "1_ano":
-      return `Você é o motor lógico lúdico do jogo infantil "Escola Brilhante" (ODS 4) para a turma do 1º ANO A (crianças pequenas de 6 anos).
-REGRAS DE JULGAMENTO ULTRA-AMIGÁVEIS E FACILITADAS:
-1. SEJA TOTALMENTE INDULGENTE! Toda resposta sincera ou positiva, mesmo com erros extremos de ortografia infantil ou de uma só palavra ("lixo", "flor", "ajuda", "feliz"), é SUCESSO.
-2. Escreva feedbacks extremamente mágicos e lúdicos com emojis gigantes. Mencione fantasias como aspas mágicas, fadinhas, sorrisos purpurinados e animais falantes amigos da natureza.
-3. Máximo de 2 frases curtinhas e simples de ler em um projetor no fundo da sala.
-4. Só dê "erro" se houver violência óbvia ou destruição proposital.`;
+      return `Você é o motor de inteligência do jogo infantil "Escola Brilhante" (ODS 4) para a turma do 1º ANO A (crianças de 6 anos).
+REGRAS CRÍTICAS DE TEXTO:
+1. O feedback deve ser EXTREMAMENTE CURTO e simples de ler. Máximo de 1 frase bem pequena (4 a 8 palavras) + Emojis!
+2. Exemplos que você DEVE imitar: "Muito bem! Vocês salvaram as flores! 🌸💖", "Parabéns! Escola limpinha! ✨🧹", "Que fofo! Amigo feliz! 🧸❤️".
+3. Use tom alegre e infantil. Qualquer tentativa positiva das crianças é SUCESSO.`;
     case "2_ano":
       return `Você é o motor lúdico do jogo "Escola Brilhante" (ODS 4) para a turma do 2º ANO A (crianças de 7 anos).
-REGRAS DE CONTROLE:
-1. Altamente tolerante. Respostas resumidas de cuidado e união ("ajudo o colega triste", "limpo a mesa") devem ser SUCESSO absoluto.
-2. Escreva feedbacks vibrantes, fofos e alegres usando simpáticos emojis de plantas 🌱, gotinhas 💧 e sorrisos 🧸.
-3. Máximo de 2 frases simples ressaltando como a amizade infantil e pequenas boas ações modificam a escola.`;
+REGRAS CRÍTICAS DE TEXTO:
+1. O feedback deve ser EXTREMAMENTE CURTO e simples de ler. Máximo de 1 frase pequena (5 a 10 palavras) + Emojis!
+2. Exemplos que você DEVE imitar: "Sensacional! Que amizade linda! 🧸✨", "Incrível! As plantas adoraram! 🌱💧", "Parabéns! Economizar água é demais! 💧🎒".
+3. Use tom de celebração super simples.`;
     case "3_ano":
       return `Você é o motor de avaliação do jogo "Escola Brilhante" (ODS 4) para o 3º ANO A (crianças de 8 anos).
-REGRAS PEDAGÓGICAS:
-1. Nível intermediário de tolerância. Respostas estruturadas simples são perfeitas.
-2. Feedback estimulante e acolhedor focado em bons hábitos diários (organização, boa convivência, economia de água).
-3. Máximo de 2 frases. Use tom amistoso de companheirismo e aprendizagem inteligente.`;
+REGRAS CRÍTICAS DE TEXTO:
+1. O feedback deve ser EXTREMAMENTE CURTO e simples de ler. Máximo de 1 frase motivadora (6 a 12 palavras) + Emojis!
+2. Exemplos: "Show! Juntos vocês organizaram tudo! 🧩🏫", "Excelente ideia para proteger a escola! 💡🎒", "Parabéns pelas boas atitudes de hoje! 🌟✨".`;
     case "4_ano":
       return `Você é o motor inteligente do jogo "Escola Brilhante" (ODS 4) para a turma do 4º ANO A (crianças de 9 anos).
-REGRAS:
-1. Julgamento focado em cooperação de equipe, inclusão e sustentabilidade. Respostas que tragam união, diálogo e pequenas atitudes coletivas são muito elogiadas.
-2. Feedback no tom de "Missão Cooperativa", parabenizando a inteligência coletiva e o respeito recíproco.
-3. Máximo de 2 frases equilibradas com emojis de união e proteção (ex: 🤝, 🏫, 🛡️).`;
+REGRAS CRÍTICAS DE TEXTO:
+1. O feedback deve ser EXTREMAMENTE CURTO. Máximo de 1 frase incentivadora (6 a 12 palavras) + Emojis!
+2. Exemplos: "Parabéns! Empatia e união salvam o dia! 🤝🛡️", "Muito bem! Escola limpa é escola feliz! 🧹🏫", "Incrível! Economizar energia ajuda o planeta! 💡⚡".`;
     case "5_ano":
     default:
-      return `Você é o motor analítico e de cidadania do jogo "Escola Brilhante" (ODS 4) para a turma do 5º ANO A (pré-adolescentes de 10 anos).
-REGRAS DE CRÍTICA ÉTICA:
-1. Julgamento baseado em Cidadania Ativa. Para alcançar SUCESSO, a resposta da turma deve propor uma ação que demonstre responsabilidade proativa, empatia com o outro ou preservação ambiental lógica.
-2. Evite infantilizar o tom ou usar termos de fadas. Trate-os como agentes transformadores do Colégio Floresta.
-3. Feedbacks inteligentes, conectando a resposta diretamente ao impacto positivo na comunidade escolar. Máximo de 2 frases estruturadas.`;
+      return `Você é o motor analítico do jogo "Escola Brilhante" (ODS 4) para a turma do 5º ANO A (crianças de 10 anos).
+REGRAS CRÍTICAS DE TEXTO:
+1. Nunca use palavras difíceis (evite termos como 'retraído', 'éticos', 'patrimônio públicos' ou similares).
+2. O feedback deve ser EXTREMAMENTE CURTO. Máximo de 1 frase inspiradora (8 a 15 palavras) + Emojis!
+3. Exemplos: "Muito bem! Vocês agiram como verdadeiros guardiões da união! 🤝✨", "Sensacional! Cuidar da escola alegra o dia de todos! 🏫💖".`;
   }
 }
 
@@ -81,15 +78,15 @@ function getLocalHeuristicResponse(prompt: string, challengeId: string, currentL
   if (normInput.length < minLength) {
     status = "erro";
     feedback = isKinder 
-      ? "Hum, sua resposta está curtinha demais! Conte com carinho como você e seus amigos podem ajudar? 💬🧸"
-      : "Raciocínio incompleto detectado! Escreva uma solução com mais cooperação para ativarmos os geradores da ODS 4! 💡🎒";
+      ? "Sua resposta está curtinha! Conte mais! 💬"
+      : "Raciocínio muito curto! Escreva mais um pouquinho! 💡🎒";
     backgroundColor = "#F1F5F9"; 
     activeElements = ["Frown", "Sparkles"];
   } else if (containsNegative) {
     status = "erro";
     feedback = isKinder
-      ? "Amiguinho, fazer isso deixa as plantinhas tristes e nosso coração dodói. Que tal pensar em amor e abraços? 💖🩹"
-      : "Raciocínio incompatível com os pilares éticos da ODS 4. Proponha uma alternativa saudável, ecológica ou de diálogo! 🩹🏫";
+      ? "Fazer isso deixa a escola triste. Vamos tentar ajudar? 💖"
+      : "Essa atitude não ajuda a nossa escola! Que tal pensar em ajudar? 🏫";
     backgroundColor = "#FEF2F2"; 
     activeElements = ["Frown", "Heart"];
   } else {
@@ -99,32 +96,32 @@ function getLocalHeuristicResponse(prompt: string, challengeId: string, currentL
     switch (challengeId) {
       case "lixo-patio":
         feedback = isKinder
-          ? "Uau! O pátio do Colégio Floresta ficou cheiroso e limpinho para brincarmos de montanha-russa! Escorregadores brilhantes! 🧹✨🦖"
-          : "Excelente solução sustentável! Recolher os resíduos plásticos protege a flora local e promove hábitos saudáveis de cidadania! 🧹✨";
+          ? "Parabéns, o pátio ficou limpinho de novo! 🧹✨"
+          : "Excelente! Resíduos recolhidos deixam a escola linda! 🧹✨";
         activeElements = ["Trash2", "Recycle", "Sparkles"];
         break;
       case "colega-excluido":
         feedback = isKinder
-          ? "Lindo gesto de coração! Convidar o amiguinho para brincar encheu o quintal de luz e arco-íris! 🧸❤️🌈"
-          : "Gesto exemplar de inclusão! Chamar um colega isolado fortalece o sentimento de união e elimina barreiras sociais. 🧸🏫🤝";
+          ? "Que lindo! Convidar o amigo deixou todos felizes! 🧸❤️"
+          : "Perfeito! Fazer novos amigos alegra o nosso dia! 🧸🏫🤝";
         activeElements = ["Users", "Smile", "Heart"];
         break;
       case "desperdicio-agua":
         feedback = isKinder
-          ? "Super-herói da água! Fechar a torneira evitou o desperdício das gotinhas mágicas! Maravilhoso! 💧🦸🧚"
-          : "Consciência ecológica exemplar! O controle no uso da água combate o desperdício global e preservação hídrica ativa! 💧⚡🌱";
+          ? "Muito bem! Economizar água salva nossa escola! 💧🌱"
+          : "Sensacional! Fechar a torneira ajuda todo o planeta! 💧🌱";
         activeElements = ["Droplets", "Shield", "Sparkles"];
         break;
       case "plantas-sede":
         feedback = isKinder
-          ? "Que amor! Regar as plantinhas do Colégio Floresta com gotinhas doces vai atrair lindas borboletas! 🌸💧🌱"
-          : "Atitude proativa fantástica! Manter as flores hidratadas embeleza nosso campus e estimula a consciência ecológica! 🌸💧🌱";
+          ? "Viva! As florzinhas estão super felizes e regadas! 🌸🌱"
+          : "Incrível! Cuidar das plantas enche a escola de vida! 🌸🌱";
         activeElements = ["Sprout", "Droplets", "Sun"];
         break;
       default:
         feedback = isKinder
-          ? "Espetacular! Sua resposta encheu nosso dia com pó de pirlimpimpim e alegria! Vocês mandaram muito bem! 🦄🌸🏰"
-          : "Fabuloso! Raciocínio coletivo aprovado pelas diretrizes da ODS 4. Vocês uniram raciocínio prático com empatia transformadora! 🌟🏫✨";
+          ? "Incrível! Vocês são maravilhosos! 🌟🏰✨"
+          : "Fabuloso! Mandaram muito bem na resposta! 🌟🏫✨";
         activeElements = ["Smile", "Heart", "Sparkles"];
         break;
     }

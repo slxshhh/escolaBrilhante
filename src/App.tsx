@@ -14,12 +14,14 @@ import { Sparkles, RotateCcw } from "lucide-react";
 // @ts-ignore
 import escolaSuccessImg from "./assets/images/colegio_floresta_sucesso_1779732904503.png";
 import GlitchScreen from "./components/GlitchScreen";
+import { getLocalHeuristicResponse } from "./utils/heuristics";
 
 const SESSION_CHALLENGE_COUNT = 6;
 
 export default function App() {
   const [selectedClassroom, setSelectedClassroom] = useState<ClassroomLevel | null>(null);
   const [isBugged, setIsBugged] = useState(true);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [shuffledChallenges, setShuffledChallenges] = useState<Challenge[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
@@ -132,34 +134,40 @@ export default function App() {
     
     setLoading(true);
     try {
-      const response = await fetch("/api/game/action", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: input,
-          currentLevel: gameState.nivel_ods4,
-          challenge: currentChallenge,
-          grade: selectedClassroom?.id || "5_ano",
-        }),
-      });
-
-      if (!response.ok) {
-        const textErr = await response.text().catch(() => "");
-        let errorMsg = "Falha na conexão";
-        try {
-          const errorData = JSON.parse(textErr);
-          errorMsg = errorData.error || errorMsg;
-        } catch (_) {}
-        throw new Error(errorMsg);
-      }
-
-      const rawText = await response.text();
       let data: GameState;
-      try {
-        data = JSON.parse(rawText);
-      } catch (parseError) {
-        console.error("Failed to parse response JSON. Raw output was:", rawText);
-        throw new Error("Ops! O servidor enviou uma resposta que a nossa escola mágica não entendeu. Vamos tentar novamente? 🪄🏫");
+
+      if (isOfflineMode) {
+        // Pure local evaluation - bypasses server API completely
+        data = getLocalHeuristicResponse(input, currentChallenge.id, gameState.nivel_ods4, selectedClassroom?.id || "5_ano");
+      } else {
+        const response = await fetch("/api/game/action", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: input,
+            currentLevel: gameState.nivel_ods4,
+            challenge: currentChallenge,
+            grade: selectedClassroom?.id || "5_ano",
+          }),
+        });
+
+        if (!response.ok) {
+          const textErr = await response.text().catch(() => "");
+          let errorMsg = "Falha na conexão";
+          try {
+            const errorData = JSON.parse(textErr);
+            errorMsg = errorData.error || errorMsg;
+          } catch (_) {}
+          throw new Error(errorMsg);
+        }
+
+        const rawText = await response.text();
+        try {
+          data = JSON.parse(rawText);
+        } catch (parseError) {
+          console.error("Failed to parse response JSON. Raw output was:", rawText);
+          throw new Error("Ops! O servidor retornou um formato inesperado.");
+        }
       }
       
       const isSuccess = data.status === GameStatus.SUCESSO;
@@ -178,16 +186,37 @@ export default function App() {
           setIsWaitingTransition(true);
           transitionTimerRef.current = setTimeout(() => {
             handleNextQuestion();
-          }, 4000);
+          }, 8000);
         }
       }
     } catch (error: any) {
-      console.error(error);
-      setGameState(prev => ({
-        ...prev,
-        status: GameStatus.ERRO,
-        feedback: error?.message || "Ops! A magia falhou. Vamos tentar de novo? 🪄🕯️",
-      }));
+      console.warn("Estouro de limite do Gemini ou instabilidade. Ativando Modo Off-line automaticamente!", error);
+      setIsOfflineMode(true);
+      
+      // Execute the local heuristic instantly so the children never see any error screen
+      const data = getLocalHeuristicResponse(input, currentChallenge.id, gameState.nivel_ods4, selectedClassroom?.id || "5_ano");
+      
+      // Append an indicator to feedback so the mediator knows we handled it safely
+      data.feedback = data.feedback + " 🛡️ (Modo de Segurança Ativado)";
+
+      const isSuccess = data.status === GameStatus.SUCESSO;
+      const newCompletedCount = isSuccess ? completedCount + 1 : completedCount;
+      const progress = Math.min(100, Math.round((newCompletedCount / SESSION_CHALLENGE_COUNT) * 100));
+
+      setGameState({
+        ...data,
+        nivel_ods4: progress
+      });
+
+      if (isSuccess) {
+        setCompletedCount(newCompletedCount);
+        if (newCompletedCount < SESSION_CHALLENGE_COUNT) {
+          setIsWaitingTransition(true);
+          transitionTimerRef.current = setTimeout(() => {
+            handleNextQuestion();
+          }, 8000);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -202,7 +231,7 @@ export default function App() {
         feedback: currentChallenge.description
       }));
     }
-  }, [currentIndex, shuffledChallenges, completedCount]);
+  }, [currentIndex, shuffledChallenges]);
 
   if (isBugged) {
     return <GlitchScreen onResolve={(classroom) => {
@@ -324,7 +353,12 @@ export default function App() {
             onNext={handleNextQuestion}
           />
 
-          <MediatorPanel onSend={handleAction} disabled={loading} />
+          <MediatorPanel 
+            onSend={handleAction} 
+            disabled={loading} 
+            isOfflineMode={isOfflineMode}
+            setIsOfflineMode={setIsOfflineMode}
+          />
         </>
       )}
     </div>

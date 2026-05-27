@@ -337,7 +337,7 @@ export default function GlitchScreen({ onResolve }: GlitchScreenProps) {
               </div>
               <div className="flex justify-between text-xs text-slate-500 mt-2 font-sans font-bold">
                 <span>CONEXÃO AMBIENTAL ATIVA</span>
-                <span>{Math.round(((resolvingStep + 1) / resolvingMessages.length) * 100)}% DETRESO</span>
+                <span>{Math.round(((resolvingStep + 1) / resolvingMessages.length) * 100)}% DE PROGRESSO</span>
               </div>
             </div>
           </motion.div>
